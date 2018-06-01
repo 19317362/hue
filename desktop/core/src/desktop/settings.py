@@ -449,6 +449,68 @@ if OPENID_AUTHENTICATION:
   LOGIN_URL = '/openid/login'
   SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+# ===================== mozilla_django_oidc =========================
+
+OPENIDC_AUTHENTICATION = 'mozilla_django_oidc.auth.OIDCAuthenticationBackend' in AUTHENTICATION_BACKENDS
+if OPENIDC_AUTHENTICATION:
+  INSTALLED_APPS.append('mozilla_django_oidc')
+  LOGIN_URL = '/oidc/authenticate/'
+  SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+  MIDDLEWARE_CLASSES.append('mozilla_django_oidc.middleware.SessionRefresh')
+
+  OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS = 15 * 60
+
+  # Add 'mozilla_django_oidc' authentication backend in hue.ini
+  #AUTHENTICATION_BACKENDS = (
+  #  'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+  #)
+  """
+  OIDC_RP_SIGN_ALGO = 'RS256'
+
+  OIDC_OP_AUTHORIZATION_ENDPOINT = 'http://localhost:8080/auth/realms/Cloudera/protocol/openid-connect/auth'
+  OIDC_OP_TOKEN_ENDPOINT = 'http://localhost:8080/auth/realms/Cloudera/protocol/openid-connect/token'
+  OIDC_OP_USER_ENDPOINT = 'http://localhost:8080/auth/realms/Cloudera/protocol/openid-connect/userinfo'
+
+  #OIDC_RP_IDP_SIGN_KEY = 'PEM file'
+  #OIDC_OP_JWKS_ENDPOINT = 'http://localhost:8080/auth/realms/Cloudera/protocol/openid-connect/certs'
+  OIDC_VERIFY_SSL = False
+
+  LOGIN_REDIRECT_URL = 'http://localhost:8601/oidc/callback/'
+  LOGOUT_REDIRECT_URL = 'http://localhost:8080/auth/realms/Cloudera/protocol/openid-connect/logout'
+  
+  OIDC_RP_CLIENT_SECRET = '20a3f4b8-8570-4626-a71e-5216016eddd4'
+  
+  # LOGIN_REDIRECT_URL_FAILURE TODO: if login failed it should not go to be default /!!! redirect endless
+  """
+  ######################################################################################################################
+  OIDC_RP_SIGN_ALGO = 'RS256'
+
+  OIDC_OP_AUTHORIZATION_ENDPOINT = 'https://test.cloudera.com:7193/auth/realms/Cloudera/protocol/openid-connect/auth'
+  OIDC_OP_TOKEN_ENDPOINT = 'https://test.cloudera.com:7193/auth/realms/Cloudera/protocol/openid-connect/token'
+  OIDC_OP_USER_ENDPOINT = 'https://test.cloudera.com:7193/auth/realms/Cloudera/protocol/openid-connect/userinfo'
+
+  #OIDC_RP_IDP_SIGN_KEY = 'PEM file'
+  OIDC_OP_JWKS_ENDPOINT = 'https://test.cloudera.com:7193/auth/realms/Cloudera/protocol/openid-connect/certs'
+  OIDC_VERIFY_SSL = False
+
+  LOGIN_REDIRECT_URL = 'http://localhost:8601/oidc/callback/'
+  LOGOUT_REDIRECT_URL = 'https://test.cloudera.com:7193/auth/realms/Cloudera/protocol/openid-connect/logout'
+
+  OIDC_RP_CLIENT_SECRET = '8a2609c5-854d-4371-9991-c8f049b5d495'
+
+  # LOGIN_REDIRECT_URL_FAILURE TODO: if login failed it should not go to be default /!!! redirect endless
+
+  ######################################################################################################################
+
+  OIDC_RP_CLIENT_ID = 'Hue-dev'
+  """
+  [[auth]]
+    user_augmentor=desktop.auth.backend.DefaultUserAugmentor
+    backend=mozilla_django_oidc.auth.OIDCAuthenticationBackend
+  """
+
+
 # OAuth
 OAUTH_AUTHENTICATION='liboauth.backend.OAuthBackend' in AUTHENTICATION_BACKENDS
 if OAUTH_AUTHENTICATION:
